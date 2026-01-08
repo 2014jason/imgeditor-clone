@@ -10,7 +10,7 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Nano Banana - AI Image Editor | Edit Photos with Text",
+  title: "image banana - AI Image Editor | Edit Photos with Text",
   description:
     "Transform any image with simple text prompts. Advanced AI model delivers consistent character editing and scene preservation.",
   generator: "v0.app",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/nano-banana-icon.svg",
+        url: "/icon.svg",
         type: "image/svg+xml",
       },
       {
@@ -31,10 +31,6 @@ export const metadata: Metadata = {
       {
         url: "/icon-dark-32x32.png",
         media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
       },
     ],
     shortcut: "/favicon.ico",
@@ -52,7 +48,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} translate="no" className="notranslate" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
-        <ThemeProvider defaultTheme="light" storageKey="nano-banana-theme">
+        <ThemeProvider defaultTheme="light" storageKey="image-banana-theme">
           {children}
         </ThemeProvider>
         <Analytics />

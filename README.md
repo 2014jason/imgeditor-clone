@@ -1,4 +1,4 @@
-# Nano Banana (imgeditor.co clone)
+# image banana (imgeditor.co clone)
 
 ## Requirements
 
@@ -33,4 +33,3 @@ Open:
 
 - UI: upload an image → enter **Main Prompt** → click **Generate Now**
 - Server route: `app/api/generate/route.ts`
-

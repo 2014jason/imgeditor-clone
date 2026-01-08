@@ -9,7 +9,7 @@ export function Footer({ locale }: { locale?: string }) {
           <div className="md:col-span-2">
             <Link href={withLocale("/", locale)} className="flex items-center gap-2 mb-4">
               <span className="text-2xl">🍌</span>
-              <span className="text-xl font-bold">Nano Banana</span>
+              <span className="text-xl font-bold">image banana</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
               Independent product. Not affiliated with Google or AI model providers.
@@ -70,7 +70,7 @@ export function Footer({ locale }: { locale?: string }) {
         </div>
 
         <div className="mt-12 pt-8 border-t border-border/40 dark:border-border text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Nano Banana. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} image banana. All rights reserved.</p>
         </div>
       </div>
     </footer>

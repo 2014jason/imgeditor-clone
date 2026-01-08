@@ -23,7 +23,7 @@ export function Header({ locale }: { locale?: string }) {
               NEW
             </Badge>
             <span className="text-2xl">🍌</span>
-            <span className="font-medium">Nano Banana Pro is now live</span>
+            <span className="font-medium">image banana Pro is now live</span>
             <span className="text-primary">Try it now →</span>
           </Link>
         </div>
@@ -32,7 +32,7 @@ export function Header({ locale }: { locale?: string }) {
       <div className="container flex h-16 items-center justify-between">
         <Link href={withLocale("/", locale)} className="flex items-center gap-2">
           <span className="text-2xl">🍌</span>
-          <span className="text-xl font-bold">Nano Banana</span>
+          <span className="text-xl font-bold">image banana</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">

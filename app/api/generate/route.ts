@@ -86,7 +86,7 @@ export async function POST(req: Request) {
     process.env.NEXT_PUBLIC_SITE_URL ??
     "http://localhost:3000"
 
-  const title = process.env.OPENROUTER_X_TITLE ?? process.env.OPENROUTER_APP_NAME ?? "nano-banana"
+  const title = process.env.OPENROUTER_X_TITLE ?? process.env.OPENROUTER_APP_NAME ?? "image-banana"
 
   const openRouterResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",

@@ -157,7 +157,7 @@ export function BackgroundRemoverPage() {
         </div>
 
         <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-6">Why Choose Nano Banana Over Competitors</h2>
+          <h2 className="text-2xl font-bold mb-6">Why Choose image banana Over Competitors</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { icon: Zap, title: "3-Second Processing", desc: "Fast background removal experience (mocked here)." },
@@ -183,7 +183,7 @@ export function BackgroundRemoverPage() {
           <Accordion type="single" collapsible className="space-y-3">
             <AccordionItem value="how" className="border border-border rounded-lg px-5 bg-card">
               <AccordionTrigger className="text-left hover:no-underline py-4">
-                How does Nano Banana's background remover work?
+                How does image banana's background remover work?
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground pb-4">
                 This clone simulates the workflow. Wire up a real background removal model/API for production.
