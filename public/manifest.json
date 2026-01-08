@@ -1,0 +1,18 @@
+{
+  "name": "Nano Banana",
+  "short_name": "Nano Banana",
+  "description": "AI Image Editor clone",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FEF3C7",
+  "theme_color": "#F59E0B",
+  "icons": [
+    {
+      "src": "/nano-banana-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
