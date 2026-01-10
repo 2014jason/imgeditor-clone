@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { AuthButton } from "@/components/auth-button"
 import { Eraser, Layers, Ellipsis, ChevronDown } from "lucide-react"
 import { withLocale } from "@/lib/i18n"
 
@@ -114,9 +115,7 @@ export function Header({ locale }: { locale?: string }) {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Button variant="outline" className="hidden sm:inline-flex bg-transparent dark:border-border">
-            Sign In
-          </Button>
+          <AuthButton />
           <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
             <Link href={withLocale("/generator", locale)}>Get Started</Link>
           </Button>
