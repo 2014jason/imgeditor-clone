@@ -1,6 +1,7 @@
-import { PricingPage } from "@/components/pages/pricing-page"
+import { ThankYouPage } from "@/components/pages/thank-you-page"
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  return <PricingPage locale={locale} />
+  return <ThankYouPage locale={locale} />
 }
+
