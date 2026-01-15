@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { AuthButton } from "@/components/auth-button"
-import { Eraser, Layers, Ellipsis, ChevronDown } from "lucide-react"
+import { Ellipsis, ChevronDown } from "lucide-react"
 import { withLocale } from "@/lib/i18n"
 
 export function Header({ locale }: { locale?: string }) {
@@ -56,32 +56,7 @@ export function Header({ locale }: { locale?: string }) {
             <div className="absolute top-full left-0 mt-2 min-w-[340px] bg-background border border-border rounded-xl shadow-lg invisible opacity-0 -translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-200 z-50">
               <div className="absolute -top-2 left-0 right-0 h-2" />
               <div className="p-1">
-                <div className="pb-2">
-                  <div className="text-xs text-muted-foreground uppercase font-semibold px-3 py-2">
-                    Editing Tools
-                  </div>
-                  <ul className="space-y-1">
-                    <li>
-                      <Link
-                        className="flex items-center gap-3 px-3 py-2 text-sm hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors"
-                        href={withLocale("/generator?mode=batch", locale)}
-                      >
-                        <Layers className="h-4 w-4 text-muted-foreground" />
-                        Batch Editor
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="flex items-center gap-3 px-3 py-2 text-sm hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors"
-                        href={withLocale("/tools/background-remover", locale)}
-                      >
-                        <Eraser className="h-4 w-4 text-muted-foreground" />
-                        Background Remover
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="pb-2">
+                <div>
                   <div className="text-xs text-muted-foreground uppercase font-semibold px-3 py-2">More Tools</div>
                   <ul className="space-y-1">
                     <li>

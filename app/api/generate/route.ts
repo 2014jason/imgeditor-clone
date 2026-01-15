@@ -1,4 +1,39 @@
 import { NextResponse } from "next/server"
+import { createSupabaseServerClient } from "@/lib/supabase/server"
+
+function sanitizeNextPath(path: string | null) {
+  if (!path) return null
+  try {
+    if (path.startsWith("http://") || path.startsWith("https://")) {
+      const url = new URL(path)
+      return `${url.pathname}${url.search}`
+    }
+  } catch {
+    // ignore invalid absolute URLs
+  }
+  if (!path.startsWith("/")) return null
+  if (path.startsWith("//")) return null
+  return path
+}
+
+function getNextPath(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const nextFromQuery = sanitizeNextPath(searchParams.get("next"))
+  if (nextFromQuery) return nextFromQuery
+
+  const referer = request.headers.get("referer")
+  if (referer) {
+    try {
+      const url = new URL(referer)
+      const nextFromReferer = sanitizeNextPath(`${url.pathname}${url.search}`)
+      if (nextFromReferer) return nextFromReferer
+    } catch {
+      // ignore bad referer
+    }
+  }
+
+  return "/generator"
+}
 
 export const runtime = "nodejs"
 
@@ -58,6 +93,29 @@ function extractText(payload: unknown): string | null {
 }
 
 export async function POST(req: Request) {
+  const origin = new URL(req.url).origin
+  const loginPath = getNextPath(req)
+  const loginUrl = `${origin}/auth/login?next=${encodeURIComponent(loginPath)}`
+
+  try {
+    const supabase = await createSupabaseServerClient()
+    const { data, error } = await supabase.auth.getUser()
+    if (error || !data.user) {
+      return NextResponse.json(
+        { error: "auth_required", loginUrl },
+        { status: 401 },
+      )
+    }
+  } catch (err) {
+    return NextResponse.json(
+      {
+        error:
+          "Authentication is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.",
+      },
+      { status: 500 },
+    )
+  }
+
   const apiKey = process.env.OPENROUTER_API_KEY
   if (!apiKey) {
     return NextResponse.json(

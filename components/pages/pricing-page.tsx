@@ -11,7 +11,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Slider } from "@/components/ui/slider"
 import { Check, Sparkles } from "lucide-react"
 import { withLocale } from "@/lib/i18n"
 import { createSupabaseBrowserClient } from "@/lib/supabase/client"
@@ -20,7 +19,7 @@ import { getSupabaseConfigOptional } from "@/lib/supabase/config"
 type BillingCycle = "monthly" | "yearly"
 type Currency = "USD" | "EUR" | "GBP" | "CNY"
 
-type PlanKey = "basic" | "pro" | "max"
+type PlanKey = "basic"
 
 type Plan = {
   key: PlanKey
@@ -38,20 +37,10 @@ type Plan = {
   hqExports: boolean
   upscale: boolean
   unblur: boolean
-  quantityAdjustable?: boolean
-}
-
-function clampInt(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, Math.round(value)))
 }
 
 function formatUsd(value: number) {
   return `$${value.toFixed(2)}`
-}
-
-function getBonusPercent(units: number) {
-  const clamped = clampInt(units, 1, 10)
-  return Math.round(((clamped - 1) / 9) * 60)
 }
 
 function getDisplayName(user: User) {
@@ -136,8 +125,6 @@ export function PricingPage({ locale }: { locale?: string }) {
 
   const [billing, setBilling] = useState<BillingCycle>("yearly")
   const [currency, setCurrency] = useState<Currency>("USD")
-  const [basicUnits, setBasicUnits] = useState(1)
-  const [proUnits, setProUnits] = useState(1)
 
   const [user, setUser] = useState<User | null>(null)
   const [authReady, setAuthReady] = useState(false)
@@ -179,53 +166,18 @@ export function PricingPage({ locale }: { locale?: string }) {
       {
         key: "basic",
         name: "Basic",
-        description: "Perfect for individuals and light users",
-        monthlyPriceUsd: 9,
-        yearlyPriceUsd: 79,
-        monthlyCredits: 150,
-        maxImagesPerBatch: 1,
+        description: "Great for individuals and casual users",
+        monthlyPriceUsd: 13.5,
+        yearlyPriceUsd: 129.6,
+        monthlyCredits: 200,
+        maxImagesPerBatch: 100,
         priority: "Standard",
-        maxQueue: 2,
+        maxQueue: 5,
         commercialUse: true,
         creditPurchase: true,
         hqExports: true,
         upscale: false,
         unblur: false,
-        quantityAdjustable: true,
-      },
-      {
-        key: "pro",
-        name: "Pro",
-        description: "For professional creators and high-frequency editing",
-        badge: "Most Popular",
-        monthlyPriceUsd: 19,
-        yearlyPriceUsd: 149,
-        monthlyCredits: 800,
-        maxImagesPerBatch: 10,
-        priority: "Fast",
-        maxQueue: 5,
-        commercialUse: true,
-        creditPurchase: true,
-        hqExports: true,
-        upscale: true,
-        unblur: false,
-        quantityAdjustable: true,
-      },
-      {
-        key: "max",
-        name: "Max",
-        description: "For teams and studios that need the highest throughput",
-        monthlyPriceUsd: 49,
-        yearlyPriceUsd: 349,
-        monthlyCredits: 2500,
-        maxImagesPerBatch: 20,
-        priority: "Fastest",
-        maxQueue: 10,
-        commercialUse: true,
-        creditPurchase: true,
-        hqExports: true,
-        upscale: true,
-        unblur: true,
       },
     ],
     [],
@@ -236,14 +188,6 @@ export function PricingPage({ locale }: { locale?: string }) {
       basic: {
         monthly: process.env.NEXT_PUBLIC_CREEM_PRODUCT_BASIC_MONTHLY ?? null,
         yearly: process.env.NEXT_PUBLIC_CREEM_PRODUCT_BASIC_YEARLY ?? null,
-      },
-      pro: {
-        monthly: process.env.NEXT_PUBLIC_CREEM_PRODUCT_PRO_MONTHLY ?? null,
-        yearly: process.env.NEXT_PUBLIC_CREEM_PRODUCT_PRO_YEARLY ?? null,
-      },
-      max: {
-        monthly: process.env.NEXT_PUBLIC_CREEM_PRODUCT_MAX_MONTHLY ?? null,
-        yearly: process.env.NEXT_PUBLIC_CREEM_PRODUCT_MAX_YEARLY ?? null,
       },
       packs: {
         starter: process.env.NEXT_PUBLIC_CREEM_PRODUCT_PACK_STARTER ?? null,
@@ -279,7 +223,7 @@ export function PricingPage({ locale }: { locale?: string }) {
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Badge variant="secondary" className="bg-yellow-100 text-yellow-900 dark:bg-yellow-900/30 dark:text-yellow-200">
             <Sparkles className="h-3.5 w-3.5 mr-1.5" />
-            LIMITED TIME: Save with Annual Billing
+            LIMITED TIME: 10% lower than imgeditor
           </Badge>
 
           <div className="inline-flex items-center gap-2">
@@ -303,7 +247,6 @@ export function PricingPage({ locale }: { locale?: string }) {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <TabsList>
             <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
-            <TabsTrigger value="team">Team Plans</TabsTrigger>
             <TabsTrigger value="packs">Credit Packs</TabsTrigger>
           </TabsList>
 
@@ -329,9 +272,6 @@ export function PricingPage({ locale }: { locale?: string }) {
               onClick={() => setBilling("yearly")}
             >
               Yearly
-              <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full">
-                🔥 LIMITED TIME: Save 50%
-              </span>
             </button>
           </div>
         </div>
@@ -353,19 +293,16 @@ export function PricingPage({ locale }: { locale?: string }) {
             </div>
           ) : null}
 
-          <div className="grid lg:grid-cols-3 gap-6">
+          <div className="grid gap-6 max-w-3xl mx-auto">
             {plans.map((plan) => {
               const price = billing === "monthly" ? plan.monthlyPriceUsd : plan.yearlyPriceUsd
               const perMonth = billing === "yearly" ? plan.yearlyPriceUsd / 12 : plan.monthlyPriceUsd
-
-              const units = plan.key === "basic" ? basicUnits : plan.key === "pro" ? proUnits : 1
-              const bonus = plan.quantityAdjustable ? getBonusPercent(units) : 0
 
               const productId = productIds[plan.key][billing]
               const disabledReason = `Missing NEXT_PUBLIC_CREEM_PRODUCT_${plan.key.toUpperCase()}_${billing.toUpperCase()} in .env.local`
 
               return (
-                <Card key={plan.key} className={`relative ${plan.key === "pro" ? "border-yellow-500/50" : ""}`}>
+                <Card key={plan.key} className="relative">
                   <CardHeader>
                     <div className="flex items-center justify-between gap-3">
                       <CardTitle className="text-xl">{plan.name}</CardTitle>
@@ -386,41 +323,8 @@ export function PricingPage({ locale }: { locale?: string }) {
                       </div>
                     </div>
 
-                    {plan.quantityAdjustable ? (
-                      <div className="rounded-xl border border-border bg-secondary/20 dark:bg-secondary/10 p-4 space-y-3">
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="text-sm font-medium">Quantity adjustment</div>
-                          <div className="text-xs text-muted-foreground">
-                            <span className="font-semibold text-foreground">{units}x</span>{" "}
-                            / {billing === "monthly" ? "month" : "year"}
-                          </div>
-                        </div>
-                        <Slider
-                          value={[units]}
-                          min={1}
-                          max={10}
-                          step={1}
-                          onValueChange={(v) => {
-                            const n = v[0]
-                            if (typeof n === "number") {
-                              if (plan.key === "basic") setBasicUnits(clampInt(n, 1, 10))
-                              if (plan.key === "pro") setProUnits(clampInt(n, 1, 10))
-                            }
-                          }}
-                        />
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span>1x</span>
-                          <span>10x</span>
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Up to <span className="font-semibold text-foreground">60%</span> bonus{" "}
-                          <span className="text-muted-foreground">({bonus}% at {units}x)</span>
-                        </div>
-                      </div>
-                    ) : null}
-
                     <div className="space-y-2">
-                      <FeatureRow label="Monthly credits" value={`${plan.monthlyCredits}${plan.quantityAdjustable ? ` (×${units})` : ""}`} />
+                      <FeatureRow label="Monthly credits" value={`${plan.monthlyCredits}`} />
                       <FeatureRow label="Max images per batch" value={`${plan.maxImagesPerBatch}`} />
                       <FeatureRow label="Priority" value={plan.priority} />
                       <FeatureRow label="Max queue" value={`${plan.maxQueue}`} />
@@ -438,7 +342,6 @@ export function PricingPage({ locale }: { locale?: string }) {
                         referenceId={referenceId}
                         customerEmail={customerEmail}
                         customerName={customerName}
-                        units={units}
                         successUrl={successUrl}
                         cancelUrl={cancelUrl}
                         disabledReason={disabledReason}
@@ -446,8 +349,6 @@ export function PricingPage({ locale }: { locale?: string }) {
                           plan: plan.key,
                           billing,
                           currency,
-                          units,
-                          bonus,
                         }}
                       />
                     ) : (
@@ -467,29 +368,6 @@ export function PricingPage({ locale }: { locale?: string }) {
           </div>
         </TabsContent>
 
-        <TabsContent value="team">
-          <Card className="max-w-3xl">
-            <CardHeader>
-              <CardTitle>Team Plans</CardTitle>
-              <CardDescription>Align with imgeditor.co layout: seats, shared workspace, centralized billing.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-sm text-muted-foreground">
-                Team plans require seat management and access control. Hook this up once you store subscription status
-                in your database via Creem webhooks.
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button variant="outline" className="bg-transparent" disabled>
-                  Coming soon
-                </Button>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90" asChild>
-                  <Link href={withLocale("/pricing", locale)}>Contact support</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="packs">
           <div className="mb-6 rounded-2xl border border-border bg-secondary/30 dark:bg-secondary/20 p-4">
             <div className="text-sm font-medium">💡 No Subscription Required - One-Time Payment</div>
@@ -498,16 +376,16 @@ export function PricingPage({ locale }: { locale?: string }) {
 
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              { key: "starter", name: "Starter Pack", credits: 150, priceUsd: 5, productId: productIds.packs.starter },
-              { key: "growth", name: "Growth Pack", credits: 500, priceUsd: 15, productId: productIds.packs.growth },
+              { key: "starter", name: "Starter Pack", credits: 500, priceUsd: 27, productId: productIds.packs.starter },
+              { key: "growth", name: "Growth Pack", credits: 1500, priceUsd: 72, productId: productIds.packs.growth },
               {
                 key: "professional",
                 name: "Professional Pack",
-                credits: 1500,
-                priceUsd: 35,
+                credits: 3600,
+                priceUsd: 180,
                 productId: productIds.packs.professional,
               },
-              { key: "enterprise", name: "Enterprise Pack", credits: 5000, priceUsd: 99, productId: productIds.packs.enterprise },
+              { key: "enterprise", name: "Enterprise Pack", credits: 15000, priceUsd: 720, productId: productIds.packs.enterprise },
             ].map((pack) => {
               const disabledReason = `Missing NEXT_PUBLIC_CREEM_PRODUCT_PACK_${pack.key.toUpperCase()} in .env.local`
               return (
@@ -518,7 +396,7 @@ export function PricingPage({ locale }: { locale?: string }) {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="text-3xl font-bold">
-                      {currency === "USD" ? `$${pack.priceUsd}` : `$${pack.priceUsd}`}
+                      {currency === "USD" ? formatUsd(pack.priceUsd) : formatUsd(pack.priceUsd)}
                       <span className="text-sm font-normal text-muted-foreground"> one-time</span>
                     </div>
 

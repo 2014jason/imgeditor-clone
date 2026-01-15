@@ -1,9 +1,10 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
+import type { AuthChangeEvent, Session, User } from "@supabase/supabase-js"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -25,6 +26,8 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Spinner } from "@/components/ui/spinner"
+import { createSupabaseBrowserClient } from "@/lib/supabase/client"
+import { getSupabaseConfigOptional } from "@/lib/supabase/config"
 
 type EditorMode = "image-to-image" | "text-to-image"
 type ModelId = "nano-banana" | "nano-banana-pro" | "seedream4"
@@ -51,6 +54,7 @@ function downloadFile(url: string, filename: string) {
 }
 
 export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "page"; locale?: string }) {
+  const pathname = usePathname()
   const searchParams = useSearchParams()
 
   const [prompt, setPrompt] = useState("")
@@ -66,8 +70,50 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
   const [upgradeOpen, setUpgradeOpen] = useState(false)
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
   const [assetLibraryOpen, setAssetLibraryOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+  const [authReady, setAuthReady] = useState(false)
   const initializedRef = useRef(false)
   const uploadInputRef = useRef<HTMLInputElement | null>(null)
+
+  const next = useMemo(() => {
+    const path = pathname || (typeof window !== "undefined" ? window.location.pathname : "/")
+    const query = searchParams?.toString()
+    return query ? `${path}?${query}` : path
+  }, [pathname, searchParams])
+
+  const loginHref = useMemo(() => `/auth/login?next=${encodeURIComponent(next)}`, [next])
+
+  useEffect(() => {
+    const config = getSupabaseConfigOptional()
+    if (!config) {
+      setUser(null)
+      setAuthReady(true)
+      return
+    }
+
+    const supabase = createSupabaseBrowserClient()
+    let mounted = true
+
+    const load = async () => {
+      try {
+        const { data } = await supabase.auth.getUser()
+        if (!mounted) return
+        setUser(data.user ?? null)
+      } finally {
+        if (mounted) setAuthReady(true)
+      }
+    }
+    void load()
+
+    const { data } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => {
+      mounted = false
+      data.subscription.unsubscribe()
+    }
+  }, [])
 
   useEffect(() => {
     if (initializedRef.current) return
@@ -158,6 +204,16 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
   const onGenerate = async () => {
     setError(null)
 
+    if (!authReady) {
+      setError("Please wait while we verify your session.")
+      return
+    }
+
+    if (!user) {
+      window.location.href = loginHref
+      return
+    }
+
     if (processing) return
     if (model === "seedream4") {
       setError("SeeDream 4 is not connected yet. Please select image banana.")
@@ -186,6 +242,13 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
       })
 
       const data = (await res.json().catch(() => null)) as any
+
+      if (res.status === 401) {
+        const redirectUrl = typeof data?.loginUrl === "string" ? data.loginUrl : loginHref
+        window.location.href = redirectUrl
+        return
+      }
+
       if (!res.ok) {
         throw new Error(typeof data?.error === "string" ? data.error : "Generation failed.")
       }
