@@ -1,4 +1,4 @@
-# image banana (imgeditor.co clone)
+# Image Banana (imgeditor.co clone)
 
 ## Requirements
 

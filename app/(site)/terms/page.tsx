@@ -7,7 +7,7 @@ export default function Page() {
         <p className="text-muted-foreground">Last updated: January 14, 2026</p>
 
         <p>
-          These Terms govern your use of image banana (“Service”), an AI image editing product powered by google AI
+          These Terms govern your use of Image Banana (“Service”), an AI image editing product powered by google AI
           models. By using the Service you accept these Terms and our Privacy Policy.
         </p>
 

@@ -7,7 +7,7 @@ export default function Page() {
         <p className="text-muted-foreground">Last updated: January 14, 2026</p>
 
         <p>
-          image banana is an AI image editing service powered by google AI models. This policy explains how we handle
+          Image Banana is an AI image editing service powered by google AI models. This policy explains how we handle
           your data across our website, widgets, and APIs (together, the “Services”).
         </p>
 

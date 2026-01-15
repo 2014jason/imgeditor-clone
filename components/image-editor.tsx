@@ -216,7 +216,7 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
 
     if (processing) return
     if (model === "seedream4") {
-      setError("SeeDream 4 is not connected yet. Please select image banana.")
+      setError("SeeDream 4 is not connected yet. Please select Image Banana.")
       return
     }
     if (mode === "image-to-image" && uploadedImages.length === 0) {
@@ -281,7 +281,7 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Get Started</h2>
               <p className="text-xl font-semibold mb-2">Try The AI Editor</p>
               <p className="text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Experience the power of image banana's natural language image editing. Transform any photo with simple
+                Experience the power of Image Banana's natural language image editing. Transform any photo with simple
                 text commands
               </p>
             </div>
@@ -326,8 +326,8 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="nano-banana">image banana</SelectItem>
-                      <SelectItem value="nano-banana-pro">image banana Pro</SelectItem>
+                      <SelectItem value="nano-banana">Image Banana</SelectItem>
+                      <SelectItem value="nano-banana-pro">Image Banana Pro</SelectItem>
                       <SelectItem value="seedream4">SeeDream 4</SelectItem>
                     </SelectContent>
                   </Select>

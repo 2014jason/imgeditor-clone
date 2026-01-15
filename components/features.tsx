@@ -7,7 +7,7 @@ export function Features() {
       icon: MessageSquare,
       title: "Natural Language Editing",
       description:
-        "Edit images using simple text prompts. image banana AI understands complex instructions like GPT for images",
+        "Edit images using simple text prompts. Image Banana AI understands complex instructions like GPT for images",
     },
     {
       icon: Users,
@@ -24,7 +24,7 @@ export function Features() {
       icon: Zap,
       title: "One-Shot Editing",
       description:
-        "Perfect results in a single attempt. image banana solves one-shot image editing challenges effortlessly",
+        "Perfect results in a single attempt. Image Banana solves one-shot image editing challenges effortlessly",
     },
     {
       icon: Images,
@@ -43,9 +43,9 @@ export function Features() {
       <div className="container">
         <div className="mx-auto max-w-2xl text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Core Features</h2>
-          <p className="text-lg text-muted-foreground">Why Choose image banana?</p>
+          <p className="text-lg text-muted-foreground">Why Choose Image Banana?</p>
           <p className="text-sm text-muted-foreground mt-2">
-            image banana is the most advanced AI image editor on LMArena. Revolutionize your photo editing with natural
+            Image Banana is the most advanced AI image editor on LMArena. Revolutionize your photo editing with natural
             language understanding
           </p>
         </div>

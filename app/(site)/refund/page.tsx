@@ -7,7 +7,7 @@ export default function Page() {
         <p className="text-muted-foreground">Last updated: January 14, 2026</p>
 
         <h2 className="text-base font-semibold">Scope</h2>
-        <p>Applies to subscriptions and one-time credit packs purchased through image banana.</p>
+        <p>Applies to subscriptions and one-time credit packs purchased through Image Banana.</p>
 
         <h2 className="text-base font-semibold">Eligibility Window</h2>
         <p>Refunds may be requested within 7 days of purchase and only if less than 50% of the purchased credits/usage has been consumed.</p>

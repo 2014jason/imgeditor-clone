@@ -3,7 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 export function FAQ() {
   const faqs = [
     {
-      question: "What is image banana?",
+      question: "What is Image Banana?",
       answer:
         "It's a revolutionary AI image editing model that transforms photos using natural language prompts. This is currently the most powerful image editing model available, with exceptional consistency. It offers superior performance compared to Flux Kontext for consistent character editing and scene preservation.",
     },
@@ -28,9 +28,9 @@ export function FAQ() {
         'The editor handles complex edits including face completion, background changes, object placement, style transfers, and character modifications. It excels at understanding contextual instructions like "place in a blizzard" or "create the whole face" while maintaining photorealistic quality.',
     },
     {
-      question: "Where can I try image banana?",
+      question: "Where can I try Image Banana?",
       answer:
-        "You can try image banana on LMArena or through our web interface. Simply upload your image, enter a text prompt describing your desired edits, and watch as image banana AI transforms your photo with incredible accuracy and consistency.",
+        "You can try Image Banana on LMArena or through our web interface. Simply upload your image, enter a text prompt describing your desired edits, and watch as Image Banana AI transforms your photo with incredible accuracy and consistency.",
     },
   ]
 

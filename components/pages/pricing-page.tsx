@@ -211,7 +211,7 @@ export function PricingPage({ locale }: { locale?: string }) {
       <div className="mx-auto max-w-4xl text-center">
         <div className="inline-flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground">
           <span className="text-lg">🍌</span>
-          <span>image banana</span>
+          <span>Image Banana</span>
         </div>
 
         <h1 className="text-4xl md:text-5xl font-bold mt-3">Pricing</h1>

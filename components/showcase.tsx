@@ -8,22 +8,22 @@ export function Showcase({ locale }: { locale?: string }) {
     {
       image: "/ai-generated-mountain-landscape-with-dramatic-ligh.jpg",
       title: "Ultra-Fast Mountain Generation",
-      description: "Created in 0.8 seconds with image banana's optimized neural engine",
+      description: "Created in 0.8 seconds with Image Banana's optimized neural engine",
     },
     {
       image: "/beautiful-garden-with-flowers-and-butterflies.jpg",
       title: "Instant Garden Creation",
-      description: "Complex scene rendered in milliseconds using image banana technology",
+      description: "Complex scene rendered in milliseconds using Image Banana technology",
     },
     {
       image: "/tropical-beach-at-sunset-with-palm-trees.jpg",
       title: "Real-time Beach Synthesis",
-      description: "image banana delivers photorealistic results at lightning speed",
+      description: "Image Banana delivers photorealistic results at lightning speed",
     },
     {
       image: "/aurora-borealis-over-snowy-mountains.jpg",
       title: "Rapid Aurora Generation",
-      description: "Advanced effects processed instantly with image banana AI",
+      description: "Advanced effects processed instantly with Image Banana AI",
     },
   ]
 
@@ -33,7 +33,7 @@ export function Showcase({ locale }: { locale?: string }) {
         <div className="mx-auto max-w-2xl text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Showcase</h2>
           <p className="text-lg text-muted-foreground">Lightning-Fast AI Creations</p>
-          <p className="text-sm text-muted-foreground mt-2">See what image banana generates in milliseconds</p>
+          <p className="text-sm text-muted-foreground mt-2">See what Image Banana generates in milliseconds</p>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6 mb-12">
@@ -49,7 +49,7 @@ export function Showcase({ locale }: { locale?: string }) {
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                 />
                 <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground dark:bg-yellow-500 dark:text-yellow-950">
-                  image banana Speed
+                  Image Banana Speed
                 </Badge>
               </div>
               <div className="p-6">
@@ -61,9 +61,9 @@ export function Showcase({ locale }: { locale?: string }) {
         </div>
 
         <div className="text-center">
-          <p className="text-lg mb-6">Experience the power of image banana yourself</p>
+          <p className="text-lg mb-6">Experience the power of Image Banana yourself</p>
           <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-            <Link href={withLocale("/generator", locale)}>Try image banana Generator</Link>
+            <Link href={withLocale("/generator", locale)}>Try Image Banana Generator</Link>
           </Button>
         </div>
       </div>

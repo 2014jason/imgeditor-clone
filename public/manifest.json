@@ -1,6 +1,6 @@
 {
-  "name": "image banana",
-  "short_name": "image banana",
+  "name": "Image Banana",
+  "short_name": "Image Banana",
   "description": "AI image editor",
   "start_url": "/",
   "display": "standalone",
