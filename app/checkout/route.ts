@@ -49,7 +49,7 @@ const checkoutHandler =
   })
 
 export const GET = apiKey
-  ? async (request: Request, context: unknown) => {
+  ? async (request: Request) => {
       const origin = new URL(request.url).origin
       const loginPath = getNextPath(request)
       const loginUrl = `${origin}/auth/login?next=${encodeURIComponent(loginPath)}`
@@ -77,7 +77,7 @@ export const GET = apiKey
         )
       }
 
-      return checkoutHandler(request, context as any)
+      return checkoutHandler(request as any)
     }
   : async () => {
       return NextResponse.json(

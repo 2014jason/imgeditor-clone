@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Upload, ImageIcon, Download, Maximize2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { withLocale } from "@/lib/i18n"
@@ -216,7 +215,7 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
 
     if (processing) return
     if (model === "seedream4") {
-      setError("SeeDream 4 is not connected yet. Please select Image Banana.")
+      setError("SeeDream 4 is not connected yet.")
       return
     }
     if (mode === "image-to-image" && uploadedImages.length === 0) {
@@ -236,6 +235,7 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          model,
           prompt: prompt.trim(),
           image: mode === "image-to-image" ? uploadedImages[0] : null,
         }),
@@ -318,23 +318,6 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
                 </div>
 
                 <p className="text-xs text-muted-foreground">{modeDescription}</p>
-
-                <div className="space-y-2">
-                  <Label>AI Model Selection</Label>
-                  <Select value={model} onValueChange={(v) => setModel(v as ModelId)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="nano-banana">Image Banana</SelectItem>
-                      <SelectItem value="nano-banana-pro">Image Banana Pro</SelectItem>
-                      <SelectItem value="seedream4">SeeDream 4</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <p className="text-xs text-muted-foreground">
-                    Different models offer unique characteristics and styles
-                  </p>
-                </div>
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">

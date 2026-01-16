@@ -38,6 +38,7 @@ function getNextPath(request: Request) {
 export const runtime = "nodejs"
 
 type GenerateRequestBody = {
+  model?: unknown
   prompt?: unknown
   image?: unknown
 }
@@ -131,6 +132,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 })
   }
 
+  const requestedModel = isNonEmptyString(body.model) ? body.model.trim() : "nano-banana"
+  const modelId =
+    requestedModel === "nano-banana-pro"
+      ? process.env.OPENROUTER_IMAGE_MODEL_PRO ?? "google/gemini-3-pro-image-preview"
+      : process.env.OPENROUTER_IMAGE_MODEL ?? "google/gemini-2.5-flash-image"
+
   const prompt = isNonEmptyString(body.prompt) ? body.prompt : ""
   if (!prompt) {
     return NextResponse.json({ error: "Prompt is required." }, { status: 400 })
@@ -155,7 +162,7 @@ export async function POST(req: Request) {
       "X-Title": title,
     },
     body: JSON.stringify({
-      model: "google/gemini-2.5-flash-image-preview",
+      model: modelId,
       modalities: ["image", "text"],
       messages: [
         {

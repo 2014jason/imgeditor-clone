@@ -16,6 +16,9 @@ Create `.env.local` and set your OpenRouter key:
 
 ```bash
 OPENROUTER_API_KEY=XXX
+# Optional: override OpenRouter image models
+OPENROUTER_IMAGE_MODEL=google/gemini-2.5-flash-image
+OPENROUTER_IMAGE_MODEL_PRO=google/gemini-3-pro-image-preview
 NEXT_PUBLIC_SUPABASE_URL=XXX
 NEXT_PUBLIC_SUPABASE_ANON_KEY=XXX
 CREEM_API_KEY=XXX
