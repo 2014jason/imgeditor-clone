@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 import { DEFAULT_LOCALE, ROUTED_LOCALES, withLocale } from "@/lib/i18n"
 
-export const revalidate = 60 * 60 * 24 // 24h
+export const revalidate = 86400
 
 function normalizeBaseUrl(value: string) {
   return value.replace(/\/+$/, "")
@@ -63,4 +63,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return entries
 }
-
