@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import Script from "next/script"
 import { headers } from "next/headers"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -48,6 +49,17 @@ export default async function RootLayout({
   return (
     <html lang={locale} translate="no" className="notranslate" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-47YK61K2PJ"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-47YK61K2PJ');`}
+        </Script>
+
         <ThemeProvider defaultTheme="light" storageKey="image-banana-theme">
           {children}
         </ThemeProvider>
