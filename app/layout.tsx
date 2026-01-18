@@ -10,10 +10,42 @@ import "./globals.css"
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
+const metadataBase =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+
 export const metadata: Metadata = {
-  title: "Image Banana - AI Image Editor | Edit Photos with Text",
+  metadataBase: new URL(metadataBase),
+  title: {
+    default: "Image Banana - AI Image Editor | Edit Photos with Text",
+    template: "%s | Image Banana",
+  },
   description:
     "Transform any image with simple text prompts. Advanced AI model delivers consistent character editing and scene preservation.",
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Image Banana",
+    title: "Image Banana - AI Image Editor | Edit Photos with Text",
+    description:
+      "Transform any image with simple text prompts. Advanced AI model delivers consistent character editing and scene preservation.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Image Banana",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Image Banana - AI Image Editor | Edit Photos with Text",
+    description:
+      "Transform any image with simple text prompts. Advanced AI model delivers consistent character editing and scene preservation.",
+    images: ["/twitter-image"],
+  },
   generator: "v0.app",
   manifest: "/manifest.json",
   other: {
