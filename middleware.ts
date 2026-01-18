@@ -10,6 +10,7 @@ export async function middleware(request: NextRequest) {
 
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set("x-locale", locale)
+  requestHeaders.set("x-canonical-url", `${request.nextUrl.origin}${pathname}`)
 
   let response = NextResponse.next({
     request: { headers: requestHeaders },

@@ -44,10 +44,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const locale = (await headers()).get("x-locale") ?? "en"
+  const requestHeaders = await headers()
+  const locale = requestHeaders.get("x-locale") ?? "en"
+  const canonicalUrl = requestHeaders.get("x-canonical-url")
 
   return (
     <html lang={locale} translate="no" className="notranslate" suppressHydrationWarning>
+      <head>{canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}</head>
       <body className={`font-sans antialiased`}>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-47YK61K2PJ"
