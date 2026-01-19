@@ -8,6 +8,16 @@ function getSafeNextPath(nextPath: string | null) {
   return nextPath
 }
 
+function addQueryParam(pathnameWithSearch: string, key: string, value: string) {
+  try {
+    const url = new URL(pathnameWithSearch, "http://local")
+    url.searchParams.set(key, value)
+    return `${url.pathname}${url.search}`
+  } catch {
+    return pathnameWithSearch
+  }
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const next = getSafeNextPath(searchParams.get("next"))
@@ -22,9 +32,9 @@ export async function GET(request: Request) {
   })
 
   if (error || !data?.url) {
-    return NextResponse.redirect(`${origin}${next}`)
+    const withError = addQueryParam(next, "auth_error", "oauth_start_failed")
+    return NextResponse.redirect(`${origin}${withError}`)
   }
 
   return NextResponse.redirect(data.url)
 }
-

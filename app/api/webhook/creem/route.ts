@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server"
 import { Webhook } from "@creem_io/nextjs"
+import {
+  handleCreemCheckoutCompleted,
+  handleCreemSubscriptionActive,
+  handleCreemSubscriptionExpired,
+  handleCreemSubscriptionPaid,
+  handleCreemSubscriptionPaused,
+  handleCreemSubscriptionTrialing,
+} from "@/lib/billing/creem"
 
 export const runtime = "nodejs"
 
@@ -8,28 +16,23 @@ const webhookSecret = process.env.CREEM_WEBHOOK_SECRET
 export const POST = webhookSecret
   ? Webhook({
       webhookSecret,
-      onCheckoutCompleted: async ({ customer, product, metadata }) => {
-        console.log("[creem] checkout.completed", {
-          customer: customer?.email,
-          product: product?.id,
-          metadata,
-        })
+      onCheckoutCompleted: async (data) => {
+        await handleCreemCheckoutCompleted(data)
       },
-      onGrantAccess: async ({ reason, customer, product, metadata }) => {
-        console.log("[creem] grant.access", {
-          reason,
-          customer: customer?.email,
-          product: product?.id,
-          metadata,
-        })
+      onSubscriptionActive: async (data) => {
+        await handleCreemSubscriptionActive(data)
       },
-      onRevokeAccess: async ({ reason, customer, product, metadata }) => {
-        console.log("[creem] revoke.access", {
-          reason,
-          customer: customer?.email,
-          product: product?.id,
-          metadata,
-        })
+      onSubscriptionTrialing: async (data) => {
+        await handleCreemSubscriptionTrialing(data)
+      },
+      onSubscriptionPaid: async (data) => {
+        await handleCreemSubscriptionPaid(data)
+      },
+      onSubscriptionPaused: async (data) => {
+        await handleCreemSubscriptionPaused(data)
+      },
+      onSubscriptionExpired: async (data) => {
+        await handleCreemSubscriptionExpired(data)
       },
     })
   : async () => {
@@ -38,4 +41,3 @@ export const POST = webhookSecret
         { status: 500 },
       )
     }
-

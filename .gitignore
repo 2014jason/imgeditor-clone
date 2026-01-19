@@ -28,3 +28,12 @@ next-env.d.ts
 
 # generated
 public/sitemap.xml
+
+# local tooling (e.g. project-local Node binary for Next.js >= 20)
+/.tools/
+
+# local billing/dev data
+/.local/
+
+# macOS
+.DS_Store

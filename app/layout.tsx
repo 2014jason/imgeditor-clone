@@ -15,21 +15,22 @@ const metadataBase =
   process.env.SITE_URL ??
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
 
+const siteDescription =
+  "Edit photos with text prompts using Image Banana. Upload an image, describe changes, and get fast, consistent results for creators, marketing, and UGC."
+
 export const metadata: Metadata = {
   metadataBase: new URL(metadataBase),
   title: {
     default: "Image Banana - AI Image Editor | Edit Photos with Text",
     template: "%s | Image Banana",
   },
-  description:
-    "Transform any image with simple text prompts. Advanced AI model delivers consistent character editing and scene preservation.",
+  description: siteDescription,
   openGraph: {
     type: "website",
     url: "/",
     siteName: "Image Banana",
     title: "Image Banana - AI Image Editor | Edit Photos with Text",
-    description:
-      "Transform any image with simple text prompts. Advanced AI model delivers consistent character editing and scene preservation.",
+    description: siteDescription,
     images: [
       {
         url: "/opengraph-image",
@@ -42,8 +43,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Image Banana - AI Image Editor | Edit Photos with Text",
-    description:
-      "Transform any image with simple text prompts. Advanced AI model delivers consistent character editing and scene preservation.",
+    description: siteDescription,
     images: ["/twitter-image"],
   },
   generator: "v0.app",

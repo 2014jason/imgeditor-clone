@@ -6,6 +6,15 @@ import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n"
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const firstSegment = pathname.split("/")[1]
+
+  // Canonicalize default locale: `/en/...` -> `/...`
+  if (firstSegment === DEFAULT_LOCALE) {
+    const url = request.nextUrl.clone()
+    const stripped = pathname.replace(new RegExp(`^/${DEFAULT_LOCALE}(/|$)`), "/")
+    url.pathname = stripped === "" ? "/" : stripped
+    return NextResponse.redirect(url, 308)
+  }
+
   const locale = isLocale(firstSegment) ? firstSegment : DEFAULT_LOCALE
 
   const requestHeaders = new Headers(request.headers)

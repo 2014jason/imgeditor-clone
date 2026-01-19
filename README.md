@@ -21,6 +21,7 @@ OPENROUTER_IMAGE_MODEL=google/gemini-2.5-flash-image
 OPENROUTER_IMAGE_MODEL_PRO=google/gemini-3-pro-image-preview
 NEXT_PUBLIC_SUPABASE_URL=XXX
 NEXT_PUBLIC_SUPABASE_ANON_KEY=XXX
+SUPABASE_SERVICE_ROLE_KEY=XXX # required for Creem webhooks + server-side credits/subscription updates
 CREEM_API_KEY=XXX
 CREEM_WEBHOOK_SECRET=XXX
 
@@ -31,6 +32,13 @@ NEXT_PUBLIC_CREEM_PRODUCT_PACK_STARTER=prod_xxx
 NEXT_PUBLIC_CREEM_PRODUCT_PACK_GROWTH=prod_xxx
 NEXT_PUBLIC_CREEM_PRODUCT_PACK_PROFESSIONAL=prod_xxx
 NEXT_PUBLIC_CREEM_PRODUCT_PACK_ENTERPRISE=prod_xxx
+
+# Optional (dev)
+# BILLING_BACKEND=local|supabase
+# BILLING_INITIAL_CREDITS=50
+# MOCK_IMAGE_GENERATION=1
+# DEV_BYPASS_AUTH=1
+# DEV_BYPASS_USER_ID=00000000-0000-0000-0000-000000000000
 ```
 
 ## Run locally
@@ -65,6 +73,14 @@ Supabase dashboard setup:
 
 - Checkout route: `app/checkout/route.ts` (used by `<CreemCheckout />`)
 - Webhook route: `app/api/webhook/creem/route.ts`
+
+## Credits & entitlements (billing)
+
+This project tracks user credits + subscription access (used by `/api/generate`) and updates them via Creem webhooks.
+
+- Supabase schema: run `supabase/billing.sql` in Supabase SQL Editor
+- Required env for webhook + credits updates: `SUPABASE_SERVICE_ROLE_KEY`
+- Dev fallback: if `SUPABASE_SERVICE_ROLE_KEY` is not set, billing uses a local file store at `.local/billing.json`
 
 Creem dashboard setup:
 

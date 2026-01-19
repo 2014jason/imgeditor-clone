@@ -9,6 +9,16 @@ import { getSupabaseConfigOptional } from "@/lib/supabase/config"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -45,6 +55,7 @@ export function AuthButton() {
 
   const [user, setUser] = useState<User | null>(null)
   const [ready, setReady] = useState(false)
+  const [signInOpen, setSignInOpen] = useState(false)
 
   useEffect(() => {
     const config = getSupabaseConfigOptional()
@@ -90,15 +101,36 @@ export function AuthButton() {
   if (!user) {
     const config = getSupabaseConfigOptional()
     return (
-      <Button
-        asChild={Boolean(config)}
-        variant="outline"
-        className="hidden sm:inline-flex bg-transparent dark:border-border"
-        disabled={!config}
-        title={!config ? "Configure Supabase env vars to enable Google login." : undefined}
-      >
-        {config ? <Link href={loginHref}>Sign In</Link> : "Sign In"}
-      </Button>
+      <>
+        <Button
+          variant="outline"
+          className="hidden sm:inline-flex bg-transparent dark:border-border"
+          disabled={!config}
+          title={!config ? "Configure Supabase env vars to enable Google login." : undefined}
+          type="button"
+          onClick={() => {
+            if (!config) return
+            setSignInOpen(true)
+          }}
+        >
+          Sign In
+        </Button>
+
+        <AlertDialog open={signInOpen} onOpenChange={setSignInOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Sign in</AlertDialogTitle>
+              <AlertDialogDescription>Continue with Google to access your account.</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Link href={loginHref}>Sign In With Google</Link>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
     )
   }
 

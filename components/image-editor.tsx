@@ -32,6 +32,7 @@ type EditorMode = "image-to-image" | "text-to-image"
 type ModelId = "nano-banana" | "nano-banana-pro" | "seedream4"
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024
+const GUEST_TRIAL_STORAGE_KEY = "image-banana-guest-trial-used"
 
 function readFileAsDataUrl(file: File) {
   return new Promise<string>((resolve, reject) => {
@@ -67,10 +68,12 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
   const [processing, setProcessing] = useState(false)
   const [generatedImages, setGeneratedImages] = useState<string[]>([])
   const [upgradeOpen, setUpgradeOpen] = useState(false)
+  const [signInPromptOpen, setSignInPromptOpen] = useState(false)
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
   const [assetLibraryOpen, setAssetLibraryOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [authReady, setAuthReady] = useState(false)
+  const [guestTrialUsed, setGuestTrialUsed] = useState(false)
   const initializedRef = useRef(false)
   const uploadInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -81,6 +84,14 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
   }, [pathname, searchParams])
 
   const loginHref = useMemo(() => `/auth/login?next=${encodeURIComponent(next)}`, [next])
+
+  useEffect(() => {
+    try {
+      setGuestTrialUsed(window.localStorage.getItem(GUEST_TRIAL_STORAGE_KEY) === "1")
+    } catch {
+      // ignore
+    }
+  }, [])
 
   useEffect(() => {
     const config = getSupabaseConfigOptional()
@@ -209,8 +220,15 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
     }
 
     if (!user) {
-      window.location.href = loginHref
-      return
+      // Allow one free generation as a guest; after that we prompt sign-in.
+      if (guestTrialUsed) {
+        setSignInPromptOpen(true)
+        return
+      }
+      if (mode === "image-to-image" && uploadedImages.length > 1) {
+        setSignInPromptOpen(true)
+        return
+      }
     }
 
     if (processing) return
@@ -231,32 +249,83 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
     setGeneratedImages([])
 
     try {
+      const requestImages =
+        mode === "image-to-image"
+          ? user
+            ? batchMode
+              ? uploadedImages
+              : uploadedImages.slice(0, 1)
+            : uploadedImages.slice(0, 1)
+          : []
+
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model,
+          mode,
           prompt: prompt.trim(),
-          image: mode === "image-to-image" ? uploadedImages[0] : null,
+          // Back-compat: keep `image` for single requests, but prefer `images` for batch.
+          image: mode === "image-to-image" ? requestImages[0] : null,
+          images: mode === "image-to-image" ? requestImages : [],
         }),
       })
 
       const data = (await res.json().catch(() => null)) as any
 
       if (res.status === 401) {
+        if (!user) {
+          setGuestTrialUsed(true)
+          try {
+            window.localStorage.setItem(GUEST_TRIAL_STORAGE_KEY, "1")
+          } catch {
+            // ignore
+          }
+          setSignInPromptOpen(true)
+          return
+        }
+
         const redirectUrl = typeof data?.loginUrl === "string" ? data.loginUrl : loginHref
         window.location.href = redirectUrl
         return
       }
 
       if (!res.ok) {
-        throw new Error(typeof data?.error === "string" ? data.error : "Generation failed.")
+        const code = typeof data?.error === "string" ? data.error : null
+        const message = typeof data?.message === "string" ? data.message : null
+
+        if (code === "subscription_required") {
+          setUpgradeOpen(true)
+          throw new Error("Batch Processing requires a subscription.")
+        }
+        if (code === "insufficient_credits") {
+          setUpgradeOpen(true)
+          throw new Error("Insufficient credits. Please purchase a credit pack or subscribe.")
+        }
+
+        throw new Error(message || code || "Generation failed.")
       }
 
       const images = Array.isArray(data?.images) ? data.images.filter((u: unknown) => typeof u === "string") : []
       if (images.length === 0) throw new Error("No images returned from API.")
 
       setGeneratedImages(images)
+
+      if (!user) {
+        setGuestTrialUsed(true)
+        try {
+          window.localStorage.setItem(GUEST_TRIAL_STORAGE_KEY, "1")
+        } catch {
+          // ignore
+        }
+      }
+
+      const errors = Array.isArray(data?.errors) ? data.errors : null
+      if (errors && errors.length > 0) {
+        const first = errors[0]
+        const msg = typeof first?.error === "string" ? first.error : "Some items failed."
+        setError(`Partial success: ${msg}`)
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Generation failed.")
     } finally {
@@ -337,7 +406,7 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Enable batch mode to process multiple images at once (UI-only in this clone).
+                    Enable batch mode to process multiple images at once (requires Pro subscription).
                   </p>
                 </div>
 
@@ -574,13 +643,30 @@ export function ImageEditor({ variant = "home", locale }: { variant?: "home" | "
           <AlertDialogHeader>
             <AlertDialogTitle>Pro Feature</AlertDialogTitle>
             <AlertDialogDescription>
-              Batch Processing is marked as Pro on imgeditor.co. This clone does not implement subscriptions yet.
+              Batch Processing is a Pro feature. Visit Pricing to subscribe or purchase credits.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction asChild>
               <Link href={withLocale("/pricing", locale)}>Upgrade</Link>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={signInPromptOpen} onOpenChange={setSignInPromptOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Sign in to continue</AlertDialogTitle>
+            <AlertDialogDescription>
+              You can try one free generation as a guest. Sign in with Google to generate more.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <Link href={loginHref}>Sign In With Google</Link>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
