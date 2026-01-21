@@ -25,6 +25,8 @@ export const metadata: Metadata = {
     template: "%s | Image Banana",
   },
   description: siteDescription,
+  keywords:
+    "AI image editor, natural language image editing, batch processing, one-shot editing, photo transformation, character consistency, advanced image generation, scene blending",
   openGraph: {
     type: "website",
     url: "/",
