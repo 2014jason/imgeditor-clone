@@ -1,4 +1,16 @@
+import type { Metadata } from "next"
 import { PolicyPage } from "@/components/pages/policy-page"
+import { buildPageMetadata } from "@/lib/seo"
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  return buildPageMetadata({
+    path: "/privacy",
+    locale,
+    title: "Privacy Policy",
+    description: "Read Image Banana's privacy policy and how we collect, use, and protect your data.",
+  })
+}
 
 export default function Page() {
   return (

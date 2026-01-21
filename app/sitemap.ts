@@ -45,7 +45,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/thank-you",
   ] as const
 
-  const locales = [DEFAULT_LOCALE, ...ROUTED_LOCALES] as const
+  const locales =
+    process.env.INDEX_I18N_PAGES === "1" ? ([DEFAULT_LOCALE, ...ROUTED_LOCALES] as const) : ([DEFAULT_LOCALE] as const)
 
   const entries: MetadataRoute.Sitemap = []
 

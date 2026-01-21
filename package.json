@@ -9,7 +9,6 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "postbuild": "node scripts/generate-sitemap.mjs",
     "start": "next start"
   },
   "dependencies": {

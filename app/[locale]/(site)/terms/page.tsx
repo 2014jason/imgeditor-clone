@@ -1,4 +1,16 @@
+import type { Metadata } from "next"
 import { PolicyPage } from "@/components/pages/policy-page"
+import { buildPageMetadata } from "@/lib/seo"
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  return buildPageMetadata({
+    path: "/terms",
+    locale,
+    title: "Terms of Service",
+    description: "Review Image Banana's terms of service, billing, acceptable use, and AI output disclaimer.",
+  })
+}
 
 export default function Page() {
   return (

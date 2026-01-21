@@ -1,4 +1,17 @@
+import type { Metadata } from "next"
 import { PolicyPage } from "@/components/pages/policy-page"
+import { buildPageMetadata } from "@/lib/seo"
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  return buildPageMetadata({
+    path: "/refund",
+    locale,
+    title: "Refund Policy",
+    description:
+      "Learn when refunds are available for Image Banana subscriptions and credit packs and how to request one.",
+  })
+}
 
 export default function Page() {
   return (

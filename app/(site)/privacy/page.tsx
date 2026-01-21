@@ -1,4 +1,12 @@
+import type { Metadata } from "next"
 import { PolicyPage } from "@/components/pages/policy-page"
+import { buildPageMetadata } from "@/lib/seo"
+
+export const metadata: Metadata = buildPageMetadata({
+  path: "/privacy",
+  title: "Privacy Policy",
+  description: "Read Image Banana's privacy policy and how we collect, use, and protect your data.",
+})
 
 export default function Page() {
   return (

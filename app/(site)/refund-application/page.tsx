@@ -1,4 +1,13 @@
+import type { Metadata } from "next"
 import { PolicyPage } from "@/components/pages/policy-page"
+import { buildPageMetadata } from "@/lib/seo"
+
+export const metadata: Metadata = buildPageMetadata({
+  path: "/refund-application",
+  title: "Refund Application",
+  description:
+    "How to submit a refund request to Image Banana, including required order details and contact information.",
+})
 
 export default function Page() {
   return (
