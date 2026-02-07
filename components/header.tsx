@@ -57,8 +57,43 @@ export function Header({ locale }: { locale?: string }) {
               <div className="absolute -top-2 left-0 right-0 h-2" />
               <div className="p-1">
                 <div>
-                  <div className="text-xs text-muted-foreground uppercase font-semibold px-3 py-2">More Tools</div>
+                  <div className="text-xs text-muted-foreground uppercase font-semibold px-3 py-2">Tools</div>
                   <ul className="space-y-1">
+                    <li>
+                      <Link
+                        className="flex items-center gap-3 px-3 py-2 text-sm hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors"
+                        href={withLocale("/tools", locale)}
+                      >
+                        <Ellipsis className="h-4 w-4 text-muted-foreground" />
+                        All Tools
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="flex items-center gap-3 px-3 py-2 text-sm hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors"
+                        href={withLocale("/tools/background-remover", locale)}
+                      >
+                        <Ellipsis className="h-4 w-4 text-muted-foreground" />
+                        Background Remover
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="mt-1 border-t border-border/40 dark:border-border" />
+
+                <div>
+                  <div className="text-xs text-muted-foreground uppercase font-semibold px-3 py-2">Resources</div>
+                  <ul className="space-y-1">
+                    <li>
+                      <Link
+                        className="flex items-center gap-3 px-3 py-2 text-sm hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors"
+                        href={withLocale("/prompts", locale)}
+                      >
+                        <Ellipsis className="h-4 w-4 text-muted-foreground" />
+                        Prompt Library
+                      </Link>
+                    </li>
                     <li>
                       <Link
                         className="flex items-center gap-3 px-3 py-2 text-sm hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors"

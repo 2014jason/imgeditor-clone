@@ -13,10 +13,11 @@ export function Hero({ locale }: { locale?: string }) {
       <div className="container">
         <div className="mx-auto max-w-4xl text-center">
           <Badge
+            asChild
             variant="secondary"
             className="mb-6 text-sm px-4 py-2 bg-yellow-100 text-yellow-900 hover:bg-yellow-200 dark:bg-yellow-500 dark:text-yellow-950"
           >
-            🍌 The AI model that outperforms Flux Kontext
+            <Link href={withLocale("/compare/flux-kontext", locale)}>🍌 The AI model that outperforms Flux Kontext</Link>
           </Badge>
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">Image Banana</h1>
@@ -38,6 +39,15 @@ export function Hero({ locale }: { locale?: string }) {
             >
               <Link href={withLocale("/#showcase", locale)}>View Examples</Link>
             </Button>
+          </div>
+
+          <div className="text-sm text-muted-foreground mb-10">
+            <Link
+              href={withLocale("/tools/background-remover", locale)}
+              className="hover:text-foreground transition-colors underline underline-offset-4"
+            >
+              Need a transparent PNG? Try Background Remover →
+            </Link>
           </div>
 
           <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">

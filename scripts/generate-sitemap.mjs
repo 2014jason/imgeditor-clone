@@ -26,10 +26,13 @@ function getPriority(route) {
   if (route === "/generator") return 0.9
   if (route === "/pricing") return 0.8
   if (route === "/showcase") return 0.7
+  if (route === "/tools") return 0.65
   if (route.startsWith("/tools/")) return 0.6
+  if (route === "/prompts") return 0.6
+  if (route.startsWith("/prompts/")) return 0.58
+  if (route.startsWith("/compare/")) return 0.55
   if (route === "/privacy" || route === "/terms") return 0.3
   if (route === "/refund" || route === "/refund-application") return 0.2
-  if (route === "/thank-you") return 0.1
   return 0.5
 }
 
@@ -51,12 +54,14 @@ async function main() {
     "/generator",
     "/pricing",
     "/showcase",
+    "/compare/flux-kontext",
+    "/tools",
     "/tools/background-remover",
+    "/prompts",
     "/privacy",
     "/terms",
     "/refund",
     "/refund-application",
-    "/thank-you",
   ]
 
   // Default locale is served without prefix; routed locales are prefixed.
@@ -97,4 +102,3 @@ async function main() {
 }
 
 await main()
-

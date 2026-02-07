@@ -1,4 +1,6 @@
+import Link from "next/link"
 import { ImageEditor } from "@/components/image-editor"
+import { withLocale } from "@/lib/i18n"
 
 export function GeneratorPage({ locale }: { locale?: string }) {
   return (
@@ -9,10 +11,16 @@ export function GeneratorPage({ locale }: { locale?: string }) {
           <p className="text-sm md:text-base text-muted-foreground mt-2">
             Edit images with natural language prompts. Upload a reference image or generate from text.
           </p>
+          <p className="text-sm text-muted-foreground mt-3">
+            Need ideas?{" "}
+            <Link href={withLocale("/prompts", locale)} className="underline underline-offset-4 hover:text-foreground transition-colors">
+              Browse the Prompt Library
+            </Link>
+            .
+          </p>
         </div>
       </div>
       <ImageEditor variant="page" locale={locale} />
     </div>
   )
 }
-

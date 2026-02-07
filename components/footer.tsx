@@ -20,6 +20,16 @@ export function Footer({ locale }: { locale?: string }) {
             <h3 className="font-semibold mb-4">Product</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
+                <Link href={withLocale("/tools", locale)} className="hover:text-foreground transition-colors">
+                  Tools
+                </Link>
+              </li>
+              <li>
+                <Link href={withLocale("/prompts", locale)} className="hover:text-foreground transition-colors">
+                  Prompt Library
+                </Link>
+              </li>
+              <li>
                 <Link href={withLocale("/generator", locale)} className="hover:text-foreground transition-colors">
                   Image Editor
                 </Link>

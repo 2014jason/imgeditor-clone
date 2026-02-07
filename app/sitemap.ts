@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { DEFAULT_LOCALE, ROUTED_LOCALES, withLocale } from "@/lib/i18n"
+import { PROMPT_TEMPLATES } from "@/lib/prompt-library"
 
 export const revalidate = 86400
 
@@ -21,10 +22,13 @@ function getPriority(path: string) {
   if (path === "/generator") return 0.9
   if (path === "/pricing") return 0.8
   if (path === "/showcase") return 0.7
+  if (path === "/tools") return 0.65
   if (path.startsWith("/tools/")) return 0.6
+  if (path === "/prompts") return 0.6
+  if (path.startsWith("/prompts/")) return 0.58
+  if (path.startsWith("/compare/")) return 0.55
   if (path === "/privacy" || path === "/terms") return 0.3
   if (path === "/refund" || path === "/refund-application") return 0.2
-  if (path === "/thank-you") return 0.1
   return 0.5
 }
 
@@ -32,18 +36,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getBaseUrl()
   const lastModified = new Date()
 
-  const routes = [
+  const routes: string[] = [
     "/",
     "/generator",
     "/pricing",
     "/showcase",
+    "/compare/flux-kontext",
+    "/tools",
     "/tools/background-remover",
+    "/prompts",
     "/privacy",
     "/terms",
     "/refund",
     "/refund-application",
-    "/thank-you",
-  ] as const
+  ]
+
+  for (const p of PROMPT_TEMPLATES) {
+    routes.push(`/prompts/${p.slug}`)
+  }
 
   const locales =
     process.env.INDEX_I18N_PAGES === "1" ? ([DEFAULT_LOCALE, ...ROUTED_LOCALES] as const) : ([DEFAULT_LOCALE] as const)
